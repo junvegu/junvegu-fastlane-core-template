@@ -5,11 +5,19 @@ platform :ios do
   desc "Run tests"
   lane :test do
     scheme = ENV['SCHEME'] || "DefaultScheme"
-    scan(
-      scheme: scheme,
-      clean: true,
-      skip_build: false
-    )
+
+    if File.exist?("Package.swift")
+      UI.message("Detected Swift Package. Running tests via xcodebuild...")
+      sh "xcodebuild -scheme #{scheme} -destination 'platform=iOS Simulator,name=iPhone 14' clean test"
+    else
+      scan(
+        scheme: scheme,
+        project: ENV['PROJECT'],
+        workspace: ENV['WORKSPACE'],
+        clean: true,
+        skip_build: false
+      )
+    end
   end
 
   desc "Lint Swift code"
