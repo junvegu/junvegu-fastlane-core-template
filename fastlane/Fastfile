@@ -17,7 +17,7 @@ platform :ios do
 
     if is_package
       UI.message("✅ Detected Swift Package. Running tests via xcodebuild...")
-      Dir.chdir(File.expand_path(".")) do
+      Dir.chdir("../") do
         sh "xcodebuild -scheme #{scheme} -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=18.4' clean test"
       end
     else
@@ -35,7 +35,7 @@ platform :ios do
   lane :lint do
     if ENV["USE_SWIFTLINT"] == "true"
       sh "which swiftlint || brew install swiftlint"
-      Dir.chdir(File.expand_path(".")) do
+      Dir.chdir("../") do
         sh "swiftlint"
       end
     else
