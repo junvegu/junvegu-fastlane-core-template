@@ -1,0 +1,51 @@
+default_platform(:ios)
+
+platform :ios do
+
+  desc "Run tests"
+  lane :test do
+    scheme = ENV['SCHEME'] || "DefaultScheme"
+    scan(
+      scheme: scheme,
+      clean: true,
+      skip_build: false
+    )
+  end
+
+  desc "Lint Swift code"
+  lane :lint do
+    if ENV["USE_SWIFTLINT"] == "true"
+      sh "which swiftlint || brew install swiftlint"
+      sh "swiftlint"
+    else
+      UI.message("Lint deshabilitado o SwiftLint no requerido")
+    end
+  end
+
+  desc "Build release"
+  lane :build_release do
+    scheme = ENV['SCHEME'] || "DefaultScheme"
+    build_app(
+      scheme: scheme,
+      export_method: "ad-hoc"
+    )
+  end
+
+  desc "CI lane"
+  lane :ci do
+    setup_tools
+    test
+    lint
+  end
+
+  desc "Instala herramientas necesarias si están habilitadas"
+  lane :setup_tools do
+    if ENV["USE_SWIFTLINT"] == "true"
+      UI.message("Instalando SwiftLint...")
+      sh "brew list swiftlint || brew install swiftlint"
+    else
+      UI.message("SwiftLint deshabilitado")
+    end
+  end
+
+end
