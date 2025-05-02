@@ -10,14 +10,16 @@ platform :ios do
     is_package = ENV["IS_SPM"] == "true"
 
     if !is_package
-      is_package = File.exist?(File.expand_path("./Package.swift")) &&
-                   Dir.glob("*.xcodeproj").empty? &&
-                   Dir.glob("*.xcworkspace").empty?
+      is_package = File.exist?(File.expand_path("../Package.swift")) &&
+                   Dir.glob("../*.xcodeproj").empty? &&
+                   Dir.glob("../*.xcworkspace").empty?
     end
 
     if is_package
       UI.message("✅ Detected Swift Package. Running tests via xcodebuild...")
-      sh "xcodebuild -scheme #{scheme} -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=18.4' clean test"
+      Dir.chdir("..") do
+        sh "xcodebuild -scheme #{scheme} -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=18.4' clean test"
+      end
     else
       scan(
         scheme: scheme,
