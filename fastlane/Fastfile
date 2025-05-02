@@ -18,7 +18,7 @@ platform :ios do
     if is_package
       UI.message("✅ Detected Swift Package. Running tests via xcodebuild...")
       Dir.chdir(File.expand_path("../..", __dir__)) do
-        sh "xcodebuild -scheme \#{scheme} -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=18.4' clean test"
+        sh "xcodebuild -scheme #{scheme} -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=18.4' clean test"
       end
     else
       scan(
