@@ -7,11 +7,13 @@ platform :ios do
     scheme = ENV['SCHEME'] || "DefaultScheme"
 
     # Detección confiable de Swift Package o uso forzado vía IS_SPM=true
-    is_package = ENV["IS_SPM"] == "true" || (
-      File.exist?(File.expand_path("./Package.swift")) &&
-      Dir.glob("*.xcodeproj").empty? &&
-      Dir.glob("*.xcworkspace").empty?
-    )
+   is_package = ENV["IS_SPM"] == "true"
+
+if !is_package
+  is_package = File.exist?(File.expand_path("./Package.swift")) &&
+               Dir.glob("*.xcodeproj").empty? &&
+               Dir.glob("*.xcworkspace").empty?
+end
 
     if is_package
       UI.message("✅ Detected Swift Package. Running tests via xcodebuild...")
