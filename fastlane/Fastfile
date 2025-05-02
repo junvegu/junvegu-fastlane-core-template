@@ -36,7 +36,13 @@ platform :ios do
       sh "which swiftlint || brew install swiftlint"
       spm_root = File.expand_path("..")
       Dir.chdir(spm_root) do
-        sh "swiftlint"
+        begin
+          sh "swiftlint"
+        rescue => ex
+          UI.error("⚠️ SwiftLint encontró errores de estilo.")
+          UI.message(ex.to_s)
+          UI.important("🔍 Corrige los errores de estilo antes de hacer merge.")
+        end
       end
     else
       UI.message("Lint deshabilitado o SwiftLint no requerido")
