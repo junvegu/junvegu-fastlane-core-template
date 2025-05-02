@@ -5,9 +5,17 @@ platform :ios do
   desc "Run tests"
   lane :test do
     scheme = ENV['SCHEME'] || "DefaultScheme"
+    is_package = File.exist?("Package.swift") && !Dir.glob("*.xcodeproj").any? && !Dir.glob("*.xcworkspace").any?
 
-    if File.exist?("Package.swift")
-      UI.message("Detected Swift Package. Running tests via xcodebuild...")
+    if is_package
+      UI.message("Detected pure Swift Package. Running tests via xcodebuild...")
+
+      # Validación explícita de existencia del esquema
+      shared_schemes = `xcodebuild -list -json`
+      unless shared_schemes.include?(scheme)
+        UI.user_error!("❌ El esquema '#{scheme}' no está disponible. Asegúrate de abrir el paquete en Xcode, generar el esquema de pruebas y marcarlo como Shared (Product > Scheme > Manage Schemes).")
+      end
+
       sh "xcodebuild -scheme #{scheme} -destination 'platform=iOS Simulator,name=iPhone 14' clean test"
     else
       scan(
