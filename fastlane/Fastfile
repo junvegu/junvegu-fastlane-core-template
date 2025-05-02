@@ -14,12 +14,7 @@ platform :ios do
     if is_package
       UI.message("✅ Detected Swift Package. Running tests via xcodebuild...")
 
-      # Validación explícita de existencia del esquema
-      shared_schemes = `xcodebuild -list -json`
-      unless shared_schemes.include?(scheme)
-        UI.user_error!("❌ El esquema '#{scheme}' no está disponible. Asegúrate de abrir el paquete en Xcode, generar el esquema de pruebas y marcarlo como Shared (Product > Scheme > Manage Schemes).")
-      end
-
+      # ⚠️ Omitimos la validación de esquema para evitar crash interno de Xcode
       sh "xcodebuild -scheme #{scheme} -destination 'platform=iOS Simulator,name=iPhone 14' clean test"
     else
       scan(
