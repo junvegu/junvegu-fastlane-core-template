@@ -17,7 +17,7 @@ platform :ios do
 
     if is_package
       UI.message("✅ Detected Swift Package. Running tests via xcodebuild...")
-      sh "xcodebuild -scheme #{scheme} -destination 'platform=iOS Simulator,name=iPhone 14' clean test"
+      sh "cd ../.. && xcodebuild -scheme #{scheme} -destination 'platform=iOS Simulator,name=iPhone 14' clean test"
     else
       scan(
         scheme: scheme,
