@@ -15,20 +15,18 @@ platform :ios do
                    Dir.glob("../*.xcworkspace").empty?
     end
 
+    spm_root = File.expand_path("..")
+
     if is_package
-      UI.message("✅ Detected Swift Package. Running tests via xcodebuild...")
-      spm_root = File.expand_path("..")
+      UI.message("✅ Detected pure Swift Package. Running with `swift test`...")
       Dir.chdir(spm_root) do
-sh "xcodebuild -scheme #{scheme} -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=18.4' clean test"
+        sh "swift test"
       end
     else
-      scan(
-        scheme: scheme,
-        project: ENV['PROJECT'],
-        workspace: ENV['WORKSPACE'],
-        clean: true,
-        skip_build: false
-      )
+      UI.message("📦 Detected Xcode project or workspace. Running with `xcodebuild`...")
+      Dir.chdir(spm_root) do
+        sh "xcodebuild -scheme #{scheme} -destination 'platform=iOS Simulator,name=iPhone 16 Pro,OS=18.4' clean test"
+      end
     end
   end
 
