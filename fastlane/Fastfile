@@ -82,38 +82,26 @@ end # <- cierra plataforma iOS
 # === Android lanes ===
 platform :android do
 
- desc "Build release APK"
-  lane :build_release do
-    gradle(
-      task: "assembleRelease",
-      project_dir: "./android",
-      gradle_command: "./android/gradlew"
-    )
-  end
-
-  desc "Run tests"
+ desc "Run unit tests with Gradle (Kotlin DSL compatible)"
   lane :test do
     gradle(
       task: "test",
-      project_dir: "./android",
-      gradle_command: "./android/gradlew"
+      project_dir: "./android"
     )
   end
 
-  desc "Distribuye a Firebase"
-  lane :distribute_firebase do
-    firebase_app_distribution(
-      apk_path: "./android/app/build/outputs/apk/release/app-release.apk",
-      firebase_cli_token: ENV["FIREBASE_TOKEN"],
-      release_notes: "Versión automática desde Fastlane"
+  desc "Run lint for Android project"
+  lane :lint do
+    gradle(
+      task: "lint",
+      project_dir: "./android"
     )
   end
 
-  desc "CI completo Android"
+  desc "CI lane Android (test + lint)"
   lane :ci do
     test
-    build_release
-    distribute_firebase
+    lint
   end
 
 
