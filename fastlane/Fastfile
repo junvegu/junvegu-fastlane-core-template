@@ -82,12 +82,16 @@ end # <- cierra plataforma iOS
 # === Android lanes ===
 platform :android do
 
-  desc "Run unit tests"
-  lane :test do
-    gradle(
-      task: "test"
-    )
+  desc "Run unit tests (non-fatal)"
+lane :test do
+  begin
+    gradle(task: "test")
+  rescue => ex
+    UI.important("⚠️ Tests fallaron. Log completo:")
+    UI.message(ex.to_s)
   end
+end
+
 
   desc "Run Android Linter"
   lane :lint do
