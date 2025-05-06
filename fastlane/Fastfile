@@ -82,27 +82,24 @@ end # <- cierra plataforma iOS
 # === Android lanes ===
 platform :android do
 
- desc "Run unit tests with Gradle (Kotlin DSL compatible)"
+  desc "Run unit tests"
   lane :test do
     gradle(
-      task: "test",
-      project_dir: "./android"
+      task: "test"
     )
   end
 
-  desc "Run lint for Android project"
+  desc "Run Android Linter"
   lane :lint do
     gradle(
-      task: "lint",
-      project_dir: "./android"
+      task: "lint"
     )
   end
 
-  desc "CI lane Android (test + lint)"
+  desc "CI Android (test + lint)"
   lane :ci do
     test
     lint
   end
-
 
 end
