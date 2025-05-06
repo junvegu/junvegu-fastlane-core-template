@@ -82,12 +82,12 @@ end # <- cierra plataforma iOS
 # === Android lanes ===
 platform :android do
 
-  desc "Build release APK"
+ desc "Build release APK"
   lane :build_release do
     gradle(
-      task: "assemble",
-      build_type: "Release",
-      project_dir: "./android"
+      task: "assembleRelease",
+      project_dir: "./android",
+      gradle_command: "./android/gradlew"
     )
   end
 
@@ -95,7 +95,8 @@ platform :android do
   lane :test do
     gradle(
       task: "test",
-      project_dir: "./android"
+      project_dir: "./android",
+      gradle_command: "./android/gradlew"
     )
   end
 
@@ -114,5 +115,6 @@ platform :android do
     build_release
     distribute_firebase
   end
+
 
 end
