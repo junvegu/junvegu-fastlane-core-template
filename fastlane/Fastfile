@@ -1,5 +1,6 @@
 default_platform(:ios)
 
+# === iOS lanes ===
 platform :ios do
 
   desc "Run tests"
@@ -75,6 +76,10 @@ platform :ios do
     end
   end
 
+end # <- cierra plataforma iOS
+
+
+# === Android lanes ===
 platform :android do
 
   desc "Build release APK"
@@ -109,6 +114,5 @@ platform :android do
     build_release
     distribute_firebase
   end
-
 
 end
