@@ -75,4 +75,40 @@ platform :ios do
     end
   end
 
+platform :android do
+
+  desc "Build release APK"
+  lane :build_release do
+    gradle(
+      task: "assemble",
+      build_type: "Release",
+      project_dir: "./android"
+    )
+  end
+
+  desc "Run tests"
+  lane :test do
+    gradle(
+      task: "test",
+      project_dir: "./android"
+    )
+  end
+
+  desc "Distribuye a Firebase"
+  lane :distribute_firebase do
+    firebase_app_distribution(
+      apk_path: "./android/app/build/outputs/apk/release/app-release.apk",
+      firebase_cli_token: ENV["FIREBASE_TOKEN"],
+      release_notes: "Versión automática desde Fastlane"
+    )
+  end
+
+  desc "CI completo Android"
+  lane :ci do
+    test
+    build_release
+    distribute_firebase
+  end
+
+
 end
